@@ -1,21 +1,29 @@
 @import "tailwindcss";
 
 @theme {
-  --color-slate-950: #020617;
-  --color-slate-900: #0f172a;
-  --color-slate-800: #1e293b;
-  --color-slate-700: #334155;
-  --color-slate-600: #475569;
-  --color-slate-500: #64748b;
-  --color-slate-400: #94a3b8;
-  --color-slate-300: #cbd5e1;
-  --color-slate-200: #e2e8f0;
-  --color-slate-100: #f1f5f9;
-  --color-blue-500: #3b82f6;
-  --color-blue-400: #60a5fa;
-  --color-red-500: #ef4444;
-  --color-emerald-500: #10b981;
-  --color-amber-500: #f59e0b;
+  --color-zinc-950: #050b14; /* Deep tactical navy */
+  --color-zinc-900: #0a1321;
+  --color-zinc-800: #13233a;
+  --color-zinc-700: #1d3354;
+  --color-zinc-600: #527196; /* Significantly brightened for contrast */
+  --color-zinc-500: #7493b8; /* Brightened */
+  --color-zinc-400: #9cb5d1; /* Brightened */
+  --color-zinc-300: #cbd5e1;
+  --color-zinc-200: #e2e8f0;
+  --color-zinc-100: #f1f5f9;
+
+  /* The Anchor */
+  --color-lime-400: #ccff00;
+  --color-lime-500: #b3e600;
+
+  /* Fonts */
+  --font-sans: var(--font-space), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
+
+  /* Supporting technical colors */
+  --color-amber-500: #ffaa00;
+  --color-red-500: #ff3333;
+  --color-cyan-500: #00e5ff;
 }
 
 :root {
@@ -23,25 +31,40 @@
 }
 
 body {
-  background-color: var(--color-slate-950);
-  color: var(--color-slate-100);
+  background-color: var(--color-zinc-950);
+  color: var(--color-zinc-100);
+  /* Dot grid pattern */
+  background-image: radial-gradient(var(--color-zinc-800) 2px, transparent 2px);
+  background-size: 24px 24px;
 }
 
-/* Custom scrollbar for webkit */
+/* Sharp mechanical scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
+  background: var(--color-zinc-950);
+  border-left: 1px solid var(--color-zinc-800);
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--color-zinc-900);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-slate-700);
-  border-radius: 4px;
+  background: var(--color-zinc-700);
+  border: 1px solid var(--color-zinc-900);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-slate-600);
+  background: var(--color-zinc-500);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--color-zinc-950);
+}
+
+/* Focus outline overrides for accessibility and style */
+*:focus-visible {
+  outline: 2px solid var(--color-lime-400);
+  outline-offset: -2px;
 }

@@ -23,12 +23,12 @@ export function AddCard({ columnId }: AddCardProps) {
 
   if (isAdding) {
     return (
-      <form onSubmit={handleSubmit} className="mt-2 p-2 bg-slate-800 rounded-lg border border-slate-700">
+      <form onSubmit={handleSubmit} className="p-2 bg-zinc-950 border-2 border-lime-400 shadow-[4px_4px_0_0_#ccff00]">
         <input
           autoFocus
           type="text"
-          placeholder="Enter a title for this card..."
-          className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100 focus:outline-none focus:border-blue-500 mb-2"
+          placeholder="NODE_TITLE..."
+          className="w-full bg-zinc-900 border border-zinc-700 p-2 text-sm font-sans font-bold text-zinc-100 focus:outline-none focus:border-lime-400 mb-2 placeholder-zinc-600"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           onKeyDown={(e) => {
@@ -36,9 +36,9 @@ export function AddCard({ columnId }: AddCardProps) {
           }}
         />
         <div className="flex items-center justify-between">
-          <Button type="submit" size="sm" variant="primary">Add card</Button>
+          <Button type="submit" size="sm" variant="primary">Inject</Button>
           <Button type="button" size="icon" variant="ghost" onClick={() => setIsAdding(false)}>
-            <X className="w-4 h-4" />
+            <X className="w-4 h-4 text-zinc-400 hover:text-red-500" />
           </Button>
         </div>
       </form>
@@ -48,10 +48,10 @@ export function AddCard({ columnId }: AddCardProps) {
   return (
     <button
       onClick={() => setIsAdding(true)}
-      className="mt-2 flex items-center gap-2 w-full p-2 text-sm text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-md transition-colors"
+      className="flex items-center gap-2 w-full p-2 text-[10px] font-mono font-bold text-zinc-500 hover:text-lime-400 hover:bg-zinc-900 border border-transparent hover:border-zinc-800 uppercase tracking-widest transition-colors"
     >
-      <Plus className="w-4 h-4" />
-      Add a card
+      <Plus className="w-3 h-3" />
+      Create Node
     </button>
   );
 }

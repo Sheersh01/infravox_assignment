@@ -49,14 +49,14 @@ export default function Home() {
 
   if (!isInitialized) {
     return (
-      <div className="flex h-screen items-center justify-center bg-slate-950 text-blue-500">
+      <div className="flex h-screen items-center justify-center bg-transparent text-lime-400">
         <Loader2 className="w-8 h-8 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col h-screen bg-slate-950 overflow-hidden text-slate-100">
+    <div className="flex flex-col h-screen bg-transparent overflow-hidden text-zinc-100">
       <TopBar 
         isSidebarOpen={isSidebarOpen} 
         onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} 

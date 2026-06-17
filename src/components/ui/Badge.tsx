@@ -5,13 +5,14 @@ interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function Badge({ variant = 'default', className = '', children, ...props }: BadgeProps) {
-  const baseStyles = 'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2';
+  // Industrial badge: sharp edges, mono font, explicit borders
+  const baseStyles = 'inline-flex items-center border px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-widest';
   
   const variants = {
-    default: 'border-transparent bg-slate-800 text-slate-100',
-    success: 'border-transparent bg-emerald-500/20 text-emerald-400',
-    warning: 'border-transparent bg-amber-500/20 text-amber-400',
-    danger: 'border-transparent bg-red-500/20 text-red-400',
+    default: 'border-zinc-700 bg-zinc-900 text-zinc-300',
+    success: 'border-lime-400 bg-lime-400/10 text-lime-400',
+    warning: 'border-amber-500 bg-amber-500/10 text-amber-500',
+    danger: 'border-red-500 bg-red-500/10 text-red-500',
   };
 
   return (

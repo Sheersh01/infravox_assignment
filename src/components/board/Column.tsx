@@ -39,14 +39,12 @@ export function Column({ column }: ColumnProps) {
       .map((id) => cards[id])
       .filter(Boolean)
       .filter((card) => {
-        // Search filter
         if (searchQuery) {
           const q = searchQuery.toLowerCase();
           const matchesTitle = card.title.toLowerCase().includes(q);
           const matchesDesc = card.description?.toLowerCase().includes(q);
           if (!matchesTitle && !matchesDesc) return false;
         }
-        // Priority filter
         if (priorityFilter !== 'All' && card.priority !== priorityFilter) {
           return false;
         }
@@ -55,13 +53,16 @@ export function Column({ column }: ColumnProps) {
   }, [column.cardIds, cards, searchQuery, priorityFilter]);
 
   return (
-    <div className="flex flex-col bg-slate-900 rounded-xl w-80 shrink-0 border border-slate-800 shadow-sm h-max pb-2">
-      <div className="p-3 border-b border-slate-800 flex justify-between items-center bg-slate-900/50 rounded-t-xl">
+    <div className="flex flex-col bg-zinc-950 w-80 shrink-0 border-2 border-zinc-800 h-max pb-2 relative">
+      <div className="absolute -top-[10px] -left-[10px] w-2 h-2 border-t-2 border-l-2 border-zinc-600" />
+      <div className="absolute -top-[10px] -right-[10px] w-2 h-2 border-t-2 border-r-2 border-zinc-600" />
+      
+      <div className="p-3 border-b-2 border-zinc-800 flex justify-between items-center bg-zinc-900">
         <div className="flex items-center gap-2 flex-1">
           {isEditing ? (
             <input
               autoFocus
-              className="bg-slate-800 text-slate-100 px-2 py-1 rounded border border-blue-500 focus:outline-none text-sm font-semibold w-full"
+              className="bg-zinc-950 text-lime-400 px-2 py-1 border-2 border-lime-400 focus:outline-none text-xs font-mono font-bold w-full uppercase"
               value={editTitle}
               onChange={(e) => setEditTitle(e.target.value)}
               onBlur={handleTitleSubmit}
@@ -75,14 +76,14 @@ export function Column({ column }: ColumnProps) {
             />
           ) : (
             <h3 
-              className="font-semibold text-slate-200 text-sm cursor-text hover:text-white transition-colors truncate"
+              className="font-mono font-bold text-zinc-100 text-sm cursor-text hover:text-lime-400 transition-colors truncate uppercase tracking-widest"
               onDoubleClick={() => setIsEditing(true)}
               title="Double-click to rename"
             >
               {column.title}
             </h3>
           )}
-          <span className="flex items-center justify-center bg-slate-800 text-slate-400 text-xs font-medium rounded-full w-6 h-6 shrink-0 ml-auto">
+          <span className="flex items-center justify-center border border-zinc-700 bg-zinc-950 text-lime-400 text-[10px] font-mono font-bold w-6 h-6 shrink-0 ml-auto shadow-[2px_2px_0_0_#27272a]">
             {columnCards.length}
           </span>
         </div>
@@ -91,10 +92,10 @@ export function Column({ column }: ColumnProps) {
       <div 
         ref={setNodeRef}
         className={`flex-1 p-2 min-h-[150px] transition-colors ${
-          isOver ? 'bg-slate-800/30' : ''
+          isOver ? 'bg-zinc-900/50' : ''
         }`}
       >
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           <SortableContext items={columnCards.map(c => c.id)} strategy={verticalListSortingStrategy}>
             {columnCards.map((card) => (
               <Card key={card.id} card={card} />
@@ -103,7 +104,9 @@ export function Column({ column }: ColumnProps) {
         </div>
         
         {(!searchQuery && priorityFilter === 'All') && (
-          <AddCard columnId={column.id} />
+          <div className="mt-3 border-t-2 border-dashed border-zinc-800 pt-3">
+            <AddCard columnId={column.id} />
+          </div>
         )}
       </div>
     </div>

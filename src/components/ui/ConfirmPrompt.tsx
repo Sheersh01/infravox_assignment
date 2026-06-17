@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from './Button';
+import { AlertTriangle } from 'lucide-react';
 
 interface ConfirmPromptProps {
   isOpen: boolean;
@@ -13,13 +14,18 @@ export function ConfirmPrompt({ isOpen, title, description, onConfirm, onCancel 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="bg-slate-900 border border-slate-800 p-6 rounded-lg shadow-xl max-w-sm w-full">
-        <h3 className="text-lg font-semibold text-slate-100">{title}</h3>
-        <p className="mt-2 text-sm text-slate-400">{description}</p>
-        <div className="mt-6 flex justify-end gap-3">
-          <Button variant="ghost" onClick={onCancel}>Cancel</Button>
-          <Button variant="danger" onClick={onConfirm}>Confirm</Button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/80 backdrop-blur-sm p-4">
+      <div className="bg-zinc-900 border-2 border-red-500 shadow-[8px_8px_0_0_#ff3333] max-w-sm w-full p-1 relative">
+        <div className="border border-zinc-800 p-5">
+          <div className="flex items-center gap-3 mb-4 text-red-500">
+            <AlertTriangle className="w-6 h-6" />
+            <h3 className="text-lg font-bold font-sans uppercase tracking-wider">{title}</h3>
+          </div>
+          <p className="text-sm font-mono text-zinc-400 mb-8">{description}</p>
+          <div className="flex justify-end gap-3">
+            <Button variant="secondary" onClick={onCancel}>Abort</Button>
+            <Button variant="danger" onClick={onConfirm}>Execute</Button>
+          </div>
         </div>
       </div>
     </div>
