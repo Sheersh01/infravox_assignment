@@ -1,14 +1,13 @@
 import React from 'react';
 import type { Metadata } from 'next';
-import { Space_Grotesk, JetBrains_Mono } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import './globals.css';
 
-const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space' });
-const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'KanbanFlow | Terminal',
-  description: 'High-performance local-first project management.',
+  title: 'KanbanFlow | Whiteboard',
+  description: 'Collaborative Kanban Board',
 };
 
 export default function RootLayout({
@@ -17,8 +16,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans bg-zinc-950 text-zinc-100 h-screen overflow-hidden flex flex-col selection:bg-lime-400 selection:text-black`}>
+    <html lang="en">
+      <body className={`${inter.className} font-sans bg-[#f4f4f5] text-zinc-900 h-screen overflow-hidden flex flex-col selection:bg-indigo-200 selection:text-indigo-900`}>
         {children}
       </body>
     </html>

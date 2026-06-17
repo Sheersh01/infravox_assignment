@@ -53,16 +53,13 @@ export function Column({ column }: ColumnProps) {
   }, [column.cardIds, cards, searchQuery, priorityFilter]);
 
   return (
-    <div className="flex flex-col bg-zinc-950 w-80 shrink-0 border-2 border-zinc-800 h-max pb-2 relative">
-      <div className="absolute -top-[10px] -left-[10px] w-2 h-2 border-t-2 border-l-2 border-zinc-600" />
-      <div className="absolute -top-[10px] -right-[10px] w-2 h-2 border-t-2 border-r-2 border-zinc-600" />
-      
-      <div className="p-3 border-b-2 border-zinc-800 flex justify-between items-center bg-zinc-900">
+    <div className="flex flex-col w-80 shrink-0 h-max pb-2 relative bg-zinc-50 rounded-2xl border border-zinc-200 shadow-sm">
+      <div className="px-3 py-3 flex justify-between items-center mb-1">
         <div className="flex items-center gap-2 flex-1">
           {isEditing ? (
             <input
               autoFocus
-              className="bg-zinc-950 text-lime-400 px-2 py-1 border-2 border-lime-400 focus:outline-none text-xs font-mono font-bold w-full uppercase"
+              className="bg-white text-zinc-900 px-2 py-1 rounded-md border-2 border-indigo-500 focus:outline-none text-base font-bold w-full shadow-sm"
               value={editTitle}
               onChange={(e) => setEditTitle(e.target.value)}
               onBlur={handleTitleSubmit}
@@ -76,14 +73,14 @@ export function Column({ column }: ColumnProps) {
             />
           ) : (
             <h3 
-              className="font-mono font-bold text-zinc-100 text-sm cursor-text hover:text-lime-400 transition-colors truncate uppercase tracking-widest"
+              className="font-bold text-zinc-800 text-base cursor-text hover:text-indigo-600 transition-colors truncate"
               onDoubleClick={() => setIsEditing(true)}
               title="Double-click to rename"
             >
               {column.title}
             </h3>
           )}
-          <span className="flex items-center justify-center border border-zinc-700 bg-zinc-950 text-lime-400 text-[10px] font-mono font-bold w-6 h-6 shrink-0 ml-auto shadow-[2px_2px_0_0_#27272a]">
+          <span className="flex items-center justify-center bg-zinc-200 text-zinc-600 text-xs font-bold rounded-full w-6 h-6 shrink-0 ml-auto">
             {columnCards.length}
           </span>
         </div>
@@ -91,8 +88,8 @@ export function Column({ column }: ColumnProps) {
 
       <div 
         ref={setNodeRef}
-        className={`flex-1 p-2 min-h-[150px] transition-colors ${
-          isOver ? 'bg-zinc-900/50' : ''
+        className={`flex-1 min-h-[150px] transition-colors rounded-2xl px-2 ${
+          isOver ? 'bg-zinc-200/50' : ''
         }`}
       >
         <div className="flex flex-col gap-3">
@@ -104,7 +101,7 @@ export function Column({ column }: ColumnProps) {
         </div>
         
         {(!searchQuery && priorityFilter === 'All') && (
-          <div className="mt-3 border-t-2 border-dashed border-zinc-800 pt-3">
+          <div className="mt-3 pt-2">
             <AddCard columnId={column.id} />
           </div>
         )}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useBoardStore } from '../../store/boardStore';
 import { useTabRegistry } from '../../hooks/useTabRegistry';
-import { Search, Activity, SidebarClose, Terminal } from 'lucide-react';
+import { Search, Activity, SidebarClose, Layers } from 'lucide-react';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 
@@ -25,22 +25,21 @@ export function TopBar({ onToggleSidebar, isSidebarOpen }: TopBarProps) {
   };
 
   return (
-    <div className="h-16 border-b-2 border-zinc-800 bg-zinc-950 flex items-center justify-between px-6 shrink-0 relative overflow-hidden">
-      {/* Decorative top border highlight */}
-      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-lime-400/0 via-lime-400/50 to-lime-400/0" />
-      
-      <div className="flex items-center gap-6">
-        <div className="flex items-center gap-2 text-lime-400 font-bold text-xl uppercase tracking-tighter">
-          <Terminal className="w-6 h-6" />
-          <span className="hidden sm:inline">K-Flow</span>
+    <div className="flex justify-between items-start w-[calc(100vw-32px)]">
+      {/* Left Floating Panel: Title & Branding */}
+      <div className="bg-white rounded-2xl shadow-md border border-zinc-200 px-4 py-2 flex items-center gap-4">
+        <div className="flex items-center gap-2 text-indigo-500 font-bold">
+          <div className="bg-indigo-100 p-1.5 rounded-lg">
+            <Layers className="w-5 h-5" />
+          </div>
         </div>
         
-        <div className="h-6 w-px bg-zinc-800" />
+        <div className="h-6 w-px bg-zinc-200" />
 
         {isEditing ? (
           <input
             autoFocus
-            className="bg-zinc-900 text-lime-400 px-2 py-1 border-2 border-lime-400 focus:outline-none font-mono text-sm w-64"
+            className="bg-zinc-50 text-zinc-900 px-2 py-1 rounded-md border-2 border-indigo-500 focus:outline-none text-sm font-semibold w-48"
             value={editTitle}
             onChange={(e) => setEditTitle(e.target.value)}
             onBlur={handleTitleSubmit}
@@ -54,7 +53,7 @@ export function TopBar({ onToggleSidebar, isSidebarOpen }: TopBarProps) {
           />
         ) : (
           <h1 
-            className="text-lg font-bold text-zinc-100 cursor-text hover:text-lime-400 transition-colors uppercase tracking-widest"
+            className="text-sm font-bold text-zinc-800 cursor-text hover:text-indigo-500 transition-colors"
             onDoubleClick={() => setIsEditing(true)}
             title="Double-click to rename"
           >
@@ -63,40 +62,44 @@ export function TopBar({ onToggleSidebar, isSidebarOpen }: TopBarProps) {
         )}
       </div>
 
-      <div className="flex items-center gap-4">
-        <div className="relative group hidden md:block">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-lime-400" />
+      {/* Right Floating Panel: Controls */}
+      <div className="bg-white rounded-2xl shadow-md border border-zinc-200 px-2 py-2 flex items-center gap-2">
+        <div className="relative group hidden md:block px-2">
+          <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-indigo-500" />
           <input
             type="text"
-            placeholder="SEARCH..."
-            className="bg-zinc-900 text-xs font-mono text-zinc-200 pl-9 pr-4 py-2 border border-zinc-700 focus:outline-none focus:border-lime-400 w-64 transition-all uppercase placeholder-zinc-600"
+            placeholder="Search board..."
+            className="bg-zinc-50 text-sm text-zinc-800 pl-8 pr-3 py-1.5 rounded-lg border border-zinc-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 w-48 transition-all"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
 
         <select 
-          className="bg-zinc-900 text-xs font-mono text-zinc-200 px-3 py-2 border border-zinc-700 focus:outline-none focus:border-lime-400 appearance-none uppercase cursor-pointer"
+          className="bg-zinc-50 text-sm text-zinc-700 px-3 py-1.5 rounded-lg border border-zinc-200 focus:outline-none focus:border-indigo-500 cursor-pointer outline-none"
           value={priorityFilter}
           onChange={(e) => setPriorityFilter(e.target.value as any)}
         >
-          <option value="All">PRIORITY: ALL</option>
-          <option value="High">PRIORITY: HIGH</option>
-          <option value="Medium">PRIORITY: MED</option>
-          <option value="Low">PRIORITY: LOW</option>
+          <option value="All">All Priorities</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
         </select>
 
-        <div className="h-6 w-px bg-zinc-800" />
+        <div className="h-6 w-px bg-zinc-200 mx-1" />
 
-        <div className="flex items-center gap-2 font-mono text-xs text-zinc-500 uppercase tracking-widest" title={`${activeTabCount} active tab(s)`}>
-          <span>Nodes</span>
-          <Badge variant={activeTabCount > 1 ? 'success' : 'default'}>
-            {activeTabCount.toString().padStart(2, '0')}
-          </Badge>
+        <div className="flex items-center gap-1.5 px-2" title={`${activeTabCount} active collaborator(s)`}>
+          <div className="relative flex -space-x-2">
+            {[...Array(Math.min(activeTabCount, 3))].map((_, i) => (
+              <div key={i} className="w-7 h-7 rounded-full bg-indigo-100 border-2 border-white flex items-center justify-center text-xs font-bold text-indigo-600">
+                {i === 2 && activeTabCount > 3 ? `+${activeTabCount - 2}` : 'U'}
+              </div>
+            ))}
+          </div>
         </div>
 
-        <Button variant="ghost" size="icon" onClick={onToggleSidebar} title="Toggle Logs">
-          {isSidebarOpen ? <SidebarClose className="w-5 h-5" /> : <Activity className="w-5 h-5" />}
+        <Button variant="ghost" size="icon" onClick={onToggleSidebar} title="Toggle Activity Log" className="rounded-xl ml-1">
+          {isSidebarOpen ? <SidebarClose className="w-5 h-5 text-zinc-600" /> : <Activity className="w-5 h-5 text-zinc-600" />}
         </Button>
       </div>
     </div>

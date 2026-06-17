@@ -131,7 +131,7 @@ export function Board({ broadcastDragState }: { broadcastDragState?: (cardId: st
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
-      <div className="flex p-6 gap-6 overflow-auto bg-transparent pb-8 items-start min-h-full">
+      <div className="flex px-8 pt-24 pb-8 gap-8 overflow-auto bg-transparent items-start min-h-full">
         {DEFAULT_COLUMN_ORDER.map((colId) => {
           const col = columns[colId];
           if (!col) return null;

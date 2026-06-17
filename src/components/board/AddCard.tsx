@@ -23,22 +23,24 @@ export function AddCard({ columnId }: AddCardProps) {
 
   if (isAdding) {
     return (
-      <form onSubmit={handleSubmit} className="p-2 bg-zinc-950 border-2 border-lime-400 shadow-[4px_4px_0_0_#ccff00]">
-        <input
-          autoFocus
-          type="text"
-          placeholder="NODE_TITLE..."
-          className="w-full bg-zinc-900 border border-zinc-700 p-2 text-sm font-sans font-bold text-zinc-100 focus:outline-none focus:border-lime-400 mb-2 placeholder-zinc-600"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Escape') setIsAdding(false);
-          }}
-        />
-        <div className="flex items-center justify-between">
-          <Button type="submit" size="sm" variant="primary">Inject</Button>
+      <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm border-2 border-indigo-500 overflow-hidden">
+        <div className="p-3">
+          <input
+            autoFocus
+            type="text"
+            placeholder="What needs to be done?"
+            className="w-full text-sm text-zinc-900 focus:outline-none placeholder-zinc-400 font-semibold p-2"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') setIsAdding(false);
+            }}
+          />
+        </div>
+        <div className="flex items-center justify-between bg-zinc-50 px-3 py-2 border-t border-zinc-100">
+          <Button type="submit" size="sm" variant="primary" className="rounded-lg">Add Card</Button>
           <Button type="button" size="icon" variant="ghost" onClick={() => setIsAdding(false)}>
-            <X className="w-4 h-4 text-zinc-400 hover:text-red-500" />
+            <X className="w-4 h-4 text-zinc-500" />
           </Button>
         </div>
       </form>
@@ -48,10 +50,10 @@ export function AddCard({ columnId }: AddCardProps) {
   return (
     <button
       onClick={() => setIsAdding(true)}
-      className="flex items-center gap-2 w-full p-2 text-[10px] font-mono font-bold text-zinc-500 hover:text-lime-400 hover:bg-zinc-900 border border-transparent hover:border-zinc-800 uppercase tracking-widest transition-colors"
+      className="flex items-center gap-2 w-full p-3 text-sm font-medium text-zinc-500 hover:text-zinc-800 hover:bg-zinc-200/50 rounded-xl transition-colors"
     >
-      <Plus className="w-3 h-3" />
-      Create Node
+      <Plus className="w-4 h-4" />
+      Add a card
     </button>
   );
 }
