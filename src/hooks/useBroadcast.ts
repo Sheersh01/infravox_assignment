@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { SYNC_CHANNEL_NAME } from '../constants/board';
 import { BoardData } from '../types/board';
 
@@ -40,7 +40,7 @@ export function useBroadcast(
     };
   }, [tabId, onSync]);
 
-  const broadcastState = (state: BoardData) => {
+  const broadcastState = useCallback((state: BoardData) => {
     const channel = new BroadcastChannel(SYNC_CHANNEL_NAME);
     channel.postMessage({
       type: 'sync_state',
@@ -48,9 +48,9 @@ export function useBroadcast(
       payload: state,
     } as SyncMessage);
     channel.close();
-  };
+  }, [tabId]);
 
-  const broadcastDragState = (cardId: string, isDragging: boolean) => {
+  const broadcastDragState = useCallback((cardId: string, isDragging: boolean) => {
     const channel = new BroadcastChannel(SYNC_CHANNEL_NAME);
     channel.postMessage({
       type: 'drag_state',
@@ -59,7 +59,7 @@ export function useBroadcast(
       isDragging,
     } as SyncMessage);
     channel.close();
-  };
+  }, [tabId]);
 
   return { broadcastState, broadcastDragState };
 }

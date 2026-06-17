@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useBoardStore } from '../../store/boardStore';
 import { Button } from '../ui/Button';
 import { ConfirmPrompt } from '../ui/ConfirmPrompt';
-import { X, Trash2, Edit3, MessageSquare, Calendar } from 'lucide-react';
+import { X, Trash2, Edit3, MessageSquare, Calendar, CheckCircle2 } from 'lucide-react';
 
 interface EditPanelProps {
   cardId: string;
@@ -14,45 +14,10 @@ export function EditPanel({ cardId }: EditPanelProps) {
   const deleteCard = useBoardStore((state) => state.deleteCard);
   const selectCard = useBoardStore((state) => state.selectCard);
 
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState<any>('Medium');
-  const [dueDate, setDueDate] = useState('');
-  const [assignee, setAssignee] = useState('');
   const [newComment, setNewComment] = useState('');
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
-  useEffect(() => {
-    if (card) {
-      setTitle(card.title);
-      setDescription(card.description || '');
-      setPriority(card.priority);
-      
-      let formattedDate = '';
-      if (card.dueDate) {
-        try {
-          const d = new Date(card.dueDate);
-          if (!isNaN(d.getTime())) formattedDate = d.toISOString().split('T')[0];
-        } catch(e) {}
-      }
-      setDueDate(formattedDate);
-      
-      setAssignee(card.assignee || '');
-    }
-  }, [card]);
-
   if (!card) return null;
-
-  const handleSave = () => {
-    updateCard(cardId, {
-      title,
-      description,
-      priority,
-      dueDate: dueDate || null,
-      assignee: assignee || null,
-      comments: card.comments,
-    });
-  };
 
   const handleDelete = () => {
     deleteCard(cardId);
@@ -97,8 +62,8 @@ export function EditPanel({ cardId }: EditPanelProps) {
           <input
             type="text"
             className="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2 text-sm font-semibold text-zinc-900 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={card.title}
+            onChange={(e) => updateCard(cardId, { title: e.target.value })}
           />
         </div>
 
@@ -106,8 +71,8 @@ export function EditPanel({ cardId }: EditPanelProps) {
           <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Description</label>
           <textarea
             className="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2 text-sm text-zinc-700 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all h-28 resize-none"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={card.description || ''}
+            onChange={(e) => updateCard(cardId, { description: e.target.value })}
             placeholder="Add details..."
           />
         </div>
@@ -117,8 +82,8 @@ export function EditPanel({ cardId }: EditPanelProps) {
             <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Priority</label>
             <select
               className="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2 text-sm text-zinc-800 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all"
-              value={priority}
-              onChange={(e) => setPriority(e.target.value)}
+              value={card.priority}
+              onChange={(e) => updateCard(cardId, { priority: e.target.value as any })}
             >
               <option value="Low">Low</option>
               <option value="Medium">Medium</option>
@@ -133,20 +98,20 @@ export function EditPanel({ cardId }: EditPanelProps) {
               <input
                 type="date"
                 className="w-full bg-zinc-50 border border-zinc-200 rounded-lg pl-8 pr-3 py-2 text-sm text-zinc-800 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:cursor-pointer"
-                value={dueDate}
-                onChange={(e) => setDueDate(e.target.value)}
+                value={card.dueDate ? new Date(card.dueDate).toISOString().split('T')[0] : ''}
+                onChange={(e) => updateCard(cardId, { dueDate: e.target.value ? new Date(e.target.value).getTime() : null })}
               />
             </div>
           </div>
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Assign</label>
+          <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Assignee</label>
           <input
             type="text"
             className="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2 text-sm text-zinc-800 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all"
-            value={assignee}
-            onChange={(e) => setAssignee(e.target.value)}
+            value={card.assignee || ''}
+            onChange={(e) => updateCard(cardId, { assignee: e.target.value })}
             placeholder="Name or email"
           />
         </div>
@@ -178,12 +143,6 @@ export function EditPanel({ cardId }: EditPanelProps) {
             ))}
           </div>
         </div>
-      </div>
-
-      <div className="p-4 border-t border-zinc-100 bg-zinc-50 sticky bottom-0 z-10 flex justify-end">
-        <Button onClick={handleSave} className="w-full">
-          Save Changes
-        </Button>
       </div>
 
       <ConfirmPrompt

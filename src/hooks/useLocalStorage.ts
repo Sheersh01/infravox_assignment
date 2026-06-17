@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { BoardData } from '../types/board';
 import { DEFAULT_BOARD_STATE, STORAGE_KEY } from '../constants/board';
 import { debounce } from '../utils/debounce';
@@ -26,9 +26,9 @@ export function useLocalStorage() {
     return DEFAULT_BOARD_STATE;
   };
 
-  const saveState = (state: BoardData) => {
+  const saveState = useCallback((state: BoardData) => {
     saveToLocalStorage(state);
-  };
+  }, []);
 
   useEffect(() => {
     // Initial load is synchronous in terms of signaling, but we mark it as loaded

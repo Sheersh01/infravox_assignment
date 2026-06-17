@@ -41,13 +41,13 @@ export function Card({ card }: CardProps) {
 
   // Miro-style colored sticky headers for priority
   const priorityColors = {
-    Low: 'bg-zinc-100',
-    Medium: 'bg-amber-100',
-    High: 'bg-red-100',
+    Low: 'bg-blue-100 text-blue-800',
+    Medium: 'bg-amber-100 text-amber-800',
+    High: 'bg-red-100 text-red-800',
   };
 
   const prioritySticker = {
-    Low: 'bg-zinc-300',
+    Low: 'bg-blue-400',
     Medium: 'bg-amber-400',
     High: 'bg-red-400',
   };

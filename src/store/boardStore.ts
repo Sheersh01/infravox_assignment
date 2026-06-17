@@ -13,12 +13,15 @@ interface BoardState extends BoardData {
   searchQuery: string;
   priorityFilter: Priority | 'All';
   isInitialized: boolean;
+  isDraggingLocally: boolean;
   inTransitCardIds: Record<string, string>; // cardId -> tabId mapping for cards currently being dragged
   
   // Actions
   initialize: (state: BoardData) => void;
   syncFromBroadcast: (state: BoardData) => void;
   setInTransitCard: (cardId: string, tabId: string, isDragging: boolean) => void;
+  setIsDraggingLocally: (isDragging: boolean) => void;
+  restoreColumns: (columns: Record<string, Column>) => void;
   
   // Board & Column Actions
   renameBoard: (title: string) => void;
@@ -43,9 +46,13 @@ export const useBoardStore = create<BoardState>((set, get) => ({
   searchQuery: '',
   priorityFilter: 'All',
   isInitialized: false,
+  isDraggingLocally: false,
   inTransitCardIds: {},
 
   initialize: (state) => set({ ...state, isInitialized: true }),
+  
+  setIsDraggingLocally: (isDraggingLocally) => set({ isDraggingLocally }),
+  restoreColumns: (columns) => set({ columns }),
   
   syncFromBroadcast: (state) => set({
     title: state.title,
@@ -106,7 +113,13 @@ export const useBoardStore = create<BoardState>((set, get) => ({
       }
     };
 
-    const newLog = appendLogEntry(state.activityLog, createLogEntry('Card Created', state.tabId, `"${title}"`));
+    const newLog = appendLogEntry(state.activityLog, {
+        id: crypto.randomUUID(),
+        action: `Card "${title}" added to ${state.columns[columnId].title}`,
+        details: '',
+        timestamp: Date.now(),
+        tabId: state.tabId,
+    });
 
     return {
       cards: { ...state.cards, [newCard.id]: newCard },
@@ -125,7 +138,13 @@ export const useBoardStore = create<BoardState>((set, get) => ({
       updatedAt: Date.now(),
     };
 
-    const newLog = appendLogEntry(state.activityLog, createLogEntry('Card Updated', state.tabId, `"${updatedCard.title}"`));
+    const newLog = appendLogEntry(state.activityLog, {
+        id: crypto.randomUUID(),
+        action: `Card "${updatedCard.title}" updated`,
+        details: '',
+        timestamp: Date.now(),
+        tabId: state.tabId,
+    });
 
     return {
       cards: { ...state.cards, [cardId]: updatedCard },
@@ -148,7 +167,13 @@ export const useBoardStore = create<BoardState>((set, get) => ({
       };
     }
 
-    const newLog = appendLogEntry(state.activityLog, createLogEntry('Card Deleted', state.tabId, `"${card.title}"`));
+    const newLog = appendLogEntry(state.activityLog, {
+        id: crypto.randomUUID(),
+        action: `Card "${card.title}" deleted`,
+        details: '',
+        timestamp: Date.now(),
+        tabId: state.tabId,
+    });
 
     return {
       cards: newCards,
@@ -176,17 +201,29 @@ export const useBoardStore = create<BoardState>((set, get) => ({
     } else {
       // Move to a different column
       const sourceCardIds = Array.from(sourceCol.cardIds);
-      sourceCardIds.splice(sourceCardIds.indexOf(cardId), 1);
+      const oldIndex = sourceCardIds.indexOf(cardId);
+      if (oldIndex !== -1) {
+        sourceCardIds.splice(oldIndex, 1);
+      }
       
       const destCardIds = Array.from(destCol.cardIds);
-      destCardIds.splice(newIndex, 0, cardId);
+      // Ensure we don't insert duplicates
+      if (!destCardIds.includes(cardId)) {
+        destCardIds.splice(newIndex, 0, cardId);
+      }
       
       newColumns[sourceColId] = { ...sourceCol, cardIds: sourceCardIds };
       newColumns[destColId] = { ...destCol, cardIds: destCardIds };
     }
 
     const card = state.cards[cardId];
-    const newLog = appendLogEntry(state.activityLog, createLogEntry('Card Moved', state.tabId, `"${card?.title}"`));
+    const newLog = appendLogEntry(state.activityLog, {
+      id: crypto.randomUUID(),
+      action: `Card "${card?.title}" moved from ${sourceCol.title} to ${destCol.title}`,
+      details: '',
+      timestamp: Date.now(),
+      tabId: state.tabId,
+    });
 
     return { columns: newColumns, activityLog: newLog };
   }),

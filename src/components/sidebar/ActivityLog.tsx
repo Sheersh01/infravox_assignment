@@ -1,6 +1,7 @@
 import React from 'react';
 import { useBoardStore } from '../../store/boardStore';
 import { formatDistanceToNow } from 'date-fns';
+import { getFriendlyTabName } from '../../utils/tabRegistry';
 import { Activity, Clock } from 'lucide-react';
 
 export function ActivityLog() {
@@ -32,18 +33,15 @@ export function ActivityLog() {
             <div className="flex flex-col gap-1">
               <div className="flex items-start justify-between gap-2">
                 <span className="text-sm font-semibold text-zinc-800 leading-snug">
-                  {entry.action}
+                  {entry.action} {entry.details ? entry.details.toLowerCase() : ''}
                 </span>
               </div>
-              {entry.details && (
-                <p className="text-sm text-zinc-500">{entry.details}</p>
-              )}
               <div className="flex items-center justify-between mt-1">
                 <span className="text-xs font-medium text-zinc-400">
                   {formatDistanceToNow(entry.timestamp, { addSuffix: true })}
                 </span>
-                <span className="text-[10px] text-zinc-400 bg-zinc-50 px-1.5 py-0.5 rounded">
-                  Tab: {entry.tabId.substring(0, 4)}
+                <span className="text-[10px] text-zinc-400 bg-zinc-50 px-1.5 py-0.5 rounded font-mono">
+                  {getFriendlyTabName(entry.tabId)}
                 </span>
               </div>
             </div>

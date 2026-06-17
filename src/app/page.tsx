@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useBoardStore } from '../store/boardStore';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useBroadcast } from '../hooks/useBroadcast';
@@ -17,11 +17,16 @@ export default function Home() {
   const state = useBoardStore((state) => state);
   const { tabId, isInitialized, initialize, syncFromBroadcast, selectedCardId, setInTransitCard } = state;
 
+  const isRemoteUpdate = useRef(false);
+
+  const handleSyncFromBroadcast = useCallback((incomingState: any) => {
+    isRemoteUpdate.current = true;
+    syncFromBroadcast(incomingState);
+  }, [syncFromBroadcast]);
+
   const { broadcastState, broadcastDragState } = useBroadcast(
     tabId, 
-    (incomingState) => {
-      syncFromBroadcast(incomingState);
-    },
+    handleSyncFromBroadcast,
     (cardId, incomingTabId, isDragging) => {
       setInTransitCard(cardId, incomingTabId, isDragging);
     }
@@ -46,9 +51,16 @@ export default function Home() {
       };
       
       saveState(dataToSaveAndSync);
-      broadcastState(dataToSaveAndSync);
+      
+      // ECHO PREVENTION: Only broadcast if this state change was initiated locally AND we aren't mid-drag
+      if (!isRemoteUpdate.current && !state.isDraggingLocally) {
+        broadcastState(dataToSaveAndSync);
+      }
+      
+      // Reset the flag after the effect runs
+      isRemoteUpdate.current = false;
     }
-  }, [state.title, state.columns, state.cards, state.activityLog, isInitialized]);
+  }, [state.title, state.columns, state.cards, state.activityLog, isInitialized, state.isDraggingLocally, saveState, broadcastState]);
 
   if (!isInitialized) {
     return (
