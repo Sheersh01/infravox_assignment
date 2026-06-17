@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useBoardStore } from '../../store/boardStore';
 import { Button } from '../ui/Button';
 import { ConfirmPrompt } from '../ui/ConfirmPrompt';
-import { X, Trash2, Edit3, MessageSquare } from 'lucide-react';
+import { X, Trash2, Edit3, MessageSquare, Calendar } from 'lucide-react';
 
 interface EditPanelProps {
   cardId: string;
@@ -27,7 +27,16 @@ export function EditPanel({ cardId }: EditPanelProps) {
       setTitle(card.title);
       setDescription(card.description || '');
       setPriority(card.priority);
-      setDueDate(card.dueDate || '');
+      
+      let formattedDate = '';
+      if (card.dueDate) {
+        try {
+          const d = new Date(card.dueDate);
+          if (!isNaN(d.getTime())) formattedDate = d.toISOString().split('T')[0];
+        } catch(e) {}
+      }
+      setDueDate(formattedDate);
+      
       setAssignee(card.assignee || '');
     }
   }, [card]);
@@ -119,17 +128,20 @@ export function EditPanel({ cardId }: EditPanelProps) {
 
           <div className="space-y-1.5">
             <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Due Date</label>
-            <input
-              type="date"
-              className="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2 text-sm text-zinc-800 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-            />
+            <div className="relative">
+              <Calendar className="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <input
+                type="date"
+                className="w-full bg-zinc-50 border border-zinc-200 rounded-lg pl-8 pr-3 py-2 text-sm text-zinc-800 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
+              />
+            </div>
           </div>
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Assignee</label>
+          <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Assign</label>
           <input
             type="text"
             className="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2 text-sm text-zinc-800 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all"
