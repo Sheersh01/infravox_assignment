@@ -61,9 +61,21 @@ Since this project has absolutely no backend dependencies, getting started is in
 ## 🧪 Testing the Requirements
 
 - **Real-time Syncing:** Tested by opening multiple tabs.
-- **Echo Loops:** The `BroadcastChannel` hook assigns a unique `tabId` to prevent the active tab from processing its own broadcasts, avoiding infinite loops.
 - **Performance:** `localStorage` writing is debounced to 250ms, ensuring drag-and-drop animations remain silky smooth (60fps).
 - **UI Interaction:** Double-click a column name to rename it. Edit card details (including due dates and comments) via the floating right-side panel. Due dates will automatically highlight in red if overdue.
+
+## 📡 BroadcastChannel Architecture
+
+The application relies on the native HTML5 `BroadcastChannel` API to sync state without a backend.
+- **Sync Mechanism:** State mutations update the local Zustand store and simultaneously broadcast a typed `sync_state` or `drag_state` event.
+- **Echo Prevention:** The app generates a unique `tabId` on initialization. Every outgoing broadcast includes this ID. The channel listener ignores messages where the `tabId` matches its own, preventing infinite echo loops.
+- **Late-Joining Tabs:** A newly opened tab hydrates its state from `localStorage` (the most recent debounced write) before processing new BroadcastChannel events.
+- **Tab Registry:** A dedicated tab registry hook broadcasts events when tabs are opened or closed to keep the active tab counter accurate.
+
+## ⚠️ Known Limitations
+
+- **Conflict Resolution:** If two tabs edit the board simultaneously, the last broadcast received overwrites the other (Last-Write-Wins). A production-ready approach would use CRDTs (like Yjs) or granular operational transforms.
+- **Storage Limits:** State is serialized to `localStorage`, limiting the board to the browser's ~5MB quota limit.
 
 ## 🎥 Demo Video
 
