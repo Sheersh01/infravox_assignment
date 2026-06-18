@@ -1,3 +1,4 @@
+"use client";
 import { create } from 'zustand';
 import { BoardData, Card, Priority, ActionType, Column } from '../types/board';
 import { DEFAULT_BOARD_STATE } from '../constants/board';
@@ -115,8 +116,8 @@ export const useBoardStore = create<BoardState>((set, get) => ({
 
     const newLog = appendLogEntry(state.activityLog, {
         id: crypto.randomUUID(),
-        action: `Card "${title}" added to ${state.columns[columnId].title}`,
-        details: '',
+        action: 'Card Created',
+        details: `"${title}" added to ${state.columns[columnId].title}`,
         timestamp: Date.now(),
         tabId: state.tabId,
     });
@@ -140,8 +141,8 @@ export const useBoardStore = create<BoardState>((set, get) => ({
 
     const newLog = appendLogEntry(state.activityLog, {
         id: crypto.randomUUID(),
-        action: `Card "${updatedCard.title}" updated`,
-        details: '',
+        action: 'Card Updated',
+        details: `"${updatedCard.title}" updated`,
         timestamp: Date.now(),
         tabId: state.tabId,
     });
@@ -169,8 +170,8 @@ export const useBoardStore = create<BoardState>((set, get) => ({
 
     const newLog = appendLogEntry(state.activityLog, {
         id: crypto.randomUUID(),
-        action: `Card "${card.title}" deleted`,
-        details: '',
+        action: 'Card Deleted',
+        details: `"${card.title}" deleted`,
         timestamp: Date.now(),
         tabId: state.tabId,
     });
@@ -219,8 +220,8 @@ export const useBoardStore = create<BoardState>((set, get) => ({
     const card = state.cards[cardId];
     const newLog = appendLogEntry(state.activityLog, {
       id: crypto.randomUUID(),
-      action: `Card "${card?.title}" moved from ${sourceCol.title} to ${destCol.title}`,
-      details: '',
+      action: 'Card Moved',
+      details: `"${card?.title}" moved from ${sourceCol.title} to ${destCol.title}`,
       timestamp: Date.now(),
       tabId: state.tabId,
     });

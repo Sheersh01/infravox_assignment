@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import { useBoardStore } from '../../store/boardStore';
 import { Button } from '../ui/Button';
@@ -99,7 +100,7 @@ export function EditPanel({ cardId }: EditPanelProps) {
                 type="date"
                 className="w-full bg-zinc-50 border border-zinc-200 rounded-lg pl-8 pr-3 py-2 text-sm text-zinc-800 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:cursor-pointer"
                 value={card.dueDate ? new Date(card.dueDate).toISOString().split('T')[0] : ''}
-                onChange={(e) => updateCard(cardId, { dueDate: e.target.value ? new Date(e.target.value).getTime() : null })}
+                onChange={(e) => updateCard(cardId, { dueDate: e.target.value ? new Date(e.target.value).toISOString() : null })}
               />
             </div>
           </div>

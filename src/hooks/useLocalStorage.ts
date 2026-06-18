@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect, useCallback } from 'react';
 import { BoardData } from '../types/board';
 import { DEFAULT_BOARD_STATE, STORAGE_KEY } from '../constants/board';

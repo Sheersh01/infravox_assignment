@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useCallback } from 'react';
 import { SYNC_CHANNEL_NAME } from '../constants/board';
 import { BoardData } from '../types/board';

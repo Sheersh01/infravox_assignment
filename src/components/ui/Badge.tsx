@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 
 interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {

@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { useBoardStore } from '../../store/boardStore';
 import { formatDistanceToNow } from 'date-fns';

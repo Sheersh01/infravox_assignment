@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from 'react';
 import { useBoardStore } from '../../store/boardStore';
 import { useTabRegistry } from '../../hooks/useTabRegistry';
