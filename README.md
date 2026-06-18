@@ -2,7 +2,9 @@
 
 A fast, local-first, and collaborative Kanban board built for the Infravox AI Frontend Internship Technical Assignment.
 
-![KanbanFlow Demo](public/kanbanflow-preview.png) *(Preview image placeholder)*
+![KanbanFlow Demo](public/image.png)
+
+*UI inspired from Miro.*
 
 ## 🚀 The Mission
 
@@ -63,5 +65,11 @@ Since this project has absolutely no backend dependencies, getting started is in
 - **Performance:** `localStorage` writing is debounced to 250ms, ensuring drag-and-drop animations remain silky smooth (60fps).
 - **UI Interaction:** Double-click a column name to rename it. Edit card details (including due dates and comments) via the floating right-side panel. Due dates will automatically highlight in red if overdue.
 
+## 🎥 Demo Video
+
+[Watch the Demo Video (Google Drive)](https://drive.google.com/file/d/1e62ICLeyBtNH62lOrp920k09Q5Bd_F7F/view?usp=sharing)
+
 ---
 *Built as a technical assignment for Infravox AI.*
+
+
