@@ -70,8 +70,8 @@ export function Board({ broadcastDragState }: { broadcastDragState?: (cardId: st
     const { active, over } = event;
     if (!over) return;
 
-    const activeId = active.id;
-    const overId = over.id;
+    const activeId = active.id as string;
+    const overId = over.id as string;
 
     if (activeId === overId) return;
 
